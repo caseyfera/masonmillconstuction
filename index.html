@@ -411,20 +411,42 @@
 </footer>
 
 <script>
-  // Set this to the inbox that should receive quote requests.
+  // 1) Create a free form at https://formspree.io using masonmillconstruction@gmail.com
+  // 2) Paste the endpoint it gives you here, e.g. "https://formspree.io/f/abcdwxyz"
+  var FORM_ENDPOINT = "";
   var QUOTE_EMAIL = "masonmillconstruction@gmail.com";
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
   document.getElementById("quote").addEventListener("submit", function (e) {
     e.preventDefault();
-    var f = e.target, status = document.getElementById("status");
+    var f = e.target, status = document.getElementById("status"), btn = f.querySelector("button");
     var name = f.name.value.trim(), reach = f.reach.value.trim();
     if (!name || !reach) { status.textContent = "Please add your name and a phone number or email."; return; }
-    if (!QUOTE_EMAIL) { status.textContent = "Online requests aren't switched on yet. Please call or email us directly."; return; }
-    var body = "Name: " + name + "\nContact: " + reach + "\nProject: " + f.type.value + "\n\n" + f.msg.value.trim();
-    window.location.href = "mailto:" + QUOTE_EMAIL + "?subject=" + encodeURIComponent("Quote request: " + f.type.value) + "&body=" + encodeURIComponent(body);
-    status.textContent = "Opening your email app to send the request.";
+
+    // Fallback until the endpoint is set: opens the visitor's email app (not delivered automatically)
+    if (!FORM_ENDPOINT) {
+      var body = "Name: " + name + "\nContact: " + reach + "\nProject: " + f.type.value + "\n\n" + f.msg.value.trim();
+      window.location.href = "mailto:" + QUOTE_EMAIL + "?subject=" + encodeURIComponent("Quote request: " + f.type.value) + "&body=" + encodeURIComponent(body);
+      status.textContent = "Opening your email app to send the request.";
+      return;
+    }
+
+    btn.disabled = true; status.textContent = "Sending...";
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name, contact: reach, project: f.type.value, message: f.msg.value.trim(),
+        _subject: "Quote request: " + f.type.value
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error("fail");
+      f.reset();
+      status.textContent = "Thanks! We got your request and will be in touch soon.";
+    }).catch(function () {
+      status.textContent = "Something went wrong. Please call or email " + QUOTE_EMAIL + " directly.";
+    }).finally(function () { btn.disabled = false; });
   });
 </script>
 </body>
