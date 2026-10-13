@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mason Mill Construction</title>
 <meta name="description" content="Mason Mill Construction is a general contractor for remodels, additions, new builds and commercial tenant improvements.">
+<link rel="icon" href="logo.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
@@ -60,16 +61,12 @@
   :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
   .wrap { width: min(1160px, 100% - 48px); margin-inline: auto; }
 
-  /* ---------- Logo lockup (rebuilt from the supplied mark) ---------- */
-  .logo { display: inline-flex; align-items: center; gap: .9em; text-decoration: none; color: var(--blue); font-size: 14px; line-height: 1; }
-  .mark { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 3.6em; height: 3.6em; align-items: center; justify-items: center; }
-  .mark b { font-family: var(--serif); font-weight: 700; font-size: 1.7em; line-height: 1; }
-  .mark i { display: block; width: .95em; height: .95em; background: var(--blue); transform: rotate(45deg); }
-  .mark b:nth-child(1) { align-self: start; } .mark i:nth-child(2) { align-self: start; justify-self: start; margin: .15em 0 0 .2em; }
-  .mark i:nth-child(3) { align-self: end; justify-self: end; margin: 0 .2em .15em 0; } .mark b:nth-child(4) { align-self: end; }
-  .word { display: flex; flex-direction: column; gap: .5em; }
-  .word span:first-child { font-family: var(--serif); font-weight: 700; font-size: 2.1em; letter-spacing: .02em; text-transform: uppercase; }
-  .word span:last-child { font-family: var(--sans); font-weight: 500; font-size: 1.12em; letter-spacing: .34em; text-transform: uppercase; }
+  /* ---------- Logo ---------- */
+  .logo { display: inline-flex; align-items: center; text-decoration: none; line-height: 1; }
+  .logo img { display: block; height: 46px; width: auto; max-width: 100%; }
+  /* The logo file is black on transparent: flip it to white on the dark theme */
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .logo img { filter: invert(1); } }
+  :root[data-theme="dark"] .logo img { filter: invert(1); }
 
   /* ---------- Header ---------- */
   header.site {
@@ -190,7 +187,7 @@
   }
   @media (max-width: 720px) {
     nav.main a:not(.btn) { display: none; }
-    .logo { font-size: 10.5px; }
+    .logo img { height: 34px; }
     .service { grid-template-columns: 1fr; gap: 8px; }
     .two { grid-template-columns: 1fr; }
     section { padding: 56px 0; }
@@ -208,8 +205,7 @@
 <header class="site">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Mason Mill Construction, home">
-      <span class="mark" aria-hidden="true"><b>M</b><i></i><i></i><b>M</b></span>
-      <span class="word"><span>Mason Mill</span><span>Construction</span></span>
+      <img src="logo.png" alt="Mason Mill Construction" width="514" height="125">
     </a>
     <nav class="main" aria-label="Main">
       <a href="#services">Services</a>
